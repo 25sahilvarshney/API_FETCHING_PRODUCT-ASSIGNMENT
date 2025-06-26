@@ -1,4 +1,3 @@
-// main.js
 
 const productContainer = document.getElementById('product-container');
 const loadMoreButton = document.getElementById('load-more');
