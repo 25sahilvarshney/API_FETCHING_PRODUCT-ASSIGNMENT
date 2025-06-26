@@ -1,5 +1,4 @@
-// This file is responsible for fetching and displaying the details of a single product on the product.html page.
-// It uses the product ID from the URL to retrieve the product data.
+
 
 document.addEventListener('DOMContentLoaded', () => {
     const productId = new URLSearchParams(window.location.search).get('id');
