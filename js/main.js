@@ -1,75 +1,69 @@
+const container = document.getElementById("product-container");
+const loadMoreBtn = document.getElementById("loadMore");
+const searchInput = document.getElementById("search");
 
-const productContainer = document.getElementById('product-container');
-const loadMoreButton = document.getElementById('load-more');
-const searchInput = document.getElementById('search-input');
+let allProducts = [];
+let displayedCount = 0;
+const step = 5;
 
-let products = [];
-let currentIndex = 0;
-const productsPerPage = 5;
 
-async function fetchProducts() {
-    try {
-        const response = await fetch('https://fakestoreapi.com/products');
-        products = await response.json();
-        displayProducts();
-    } catch (error) {
-        console.error('Error fetching products:', error);
-    }
+fetch("https://fakestoreapi.com/products")
+  .then((res) => res.json())
+  .then((data) => {
+    allProducts = data;
+    renderProducts();
+  });
+
+
+function renderProducts() {
+  const nextProducts = allProducts.slice(displayedCount, displayedCount + step);
+  nextProducts.forEach((product) => {
+    const card = document.createElement("div");
+    card.className = "product-card";
+    card.onclick = () => {
+      window.location.href = `product.html?id=${product.id}`;
+    };
+    card.innerHTML = `
+      <img src="${product.image}" alt="">
+      <h4>${product.title}</h4>
+      <p>$${product.price}</p>
+    `;
+    container.appendChild(card);
+  });
+
+  displayedCount += step;
+  if (displayedCount >= allProducts.length) {
+    loadMoreBtn.style.display = "none";
+  }
 }
 
-function displayProducts() {
-    const endIndex = currentIndex + productsPerPage;
-    const productsToDisplay = products.slice(currentIndex, endIndex);
 
-    productsToDisplay.forEach(product => {
-        const productCard = document.createElement('div');
-        productCard.className = 'product-card';
-        productCard.innerHTML = `
-            <img src="${product.image}" alt="${product.title}">
-            <h3>${product.title}</h3>
-            <p>$${product.price}</p>
-        `;
-        productCard.addEventListener('click', () => {
-            window.location.href = `product.html?id=${product.id}`;
-        });
-        productContainer.appendChild(productCard);
+loadMoreBtn.addEventListener("click", renderProducts);
+
+
+searchInput.addEventListener("input", function () {
+  const searchTerm = this.value.toLowerCase();
+  const filtered = allProducts
+    .slice(0, displayedCount)
+    .filter((p) => p.title.toLowerCase().includes(searchTerm));
+
+  container.innerHTML = "";
+
+  if (filtered.length === 0) {
+    container.innerHTML = "<p>No products found</p>";
+  } else {
+    filtered.forEach((product) => {
+      const card = document.createElement("div");
+      card.className = "product-card";
+      card.onclick = () => {
+        window.location.href = `product.html?id=${product.id}`;
+      };
+      card.innerHTML = `
+        <img src="${product.image}" alt="">
+        <h4>${product.title}</h4>
+        <p>$${product.price}</p>
+      `;
+      container.appendChild(card);
     });
-
-    currentIndex += productsPerPage;
-
-    if (currentIndex >= products.length) {
-        loadMoreButton.style.display = 'none';
-    }
-}
-
-loadMoreButton.addEventListener('click', displayProducts);
-
-searchInput.addEventListener('input', () => {
-    const searchTerm = searchInput.value.toLowerCase();
-    const filteredProducts = products.filter(product => 
-        product.title.toLowerCase().includes(searchTerm)
-    );
-
-    productContainer.innerHTML = '';
-
-    if (filteredProducts.length > 0) {
-        currentIndex = 0;
-        filteredProducts.forEach(product => {
-            const productCard = document.createElement('div');
-            productCard.className = 'product-card';
-            productCard.innerHTML = `
-                <img src="${product.image}" alt="${product.title}">
-                <h3>${product.title}</h3>
-                <p>$${product.price}</p>
-            `;
-            productCard.addEventListener('click', () => {
-                window.location.href = `product.html?id=${product.id}`;
-            });
-            productContainer.appendChild(productCard);
-        });
-    } else {
-        productContainer.innerHTML = '<p>No products found</p>';
-    }
+  }
 });
-
-fetchProducts();
