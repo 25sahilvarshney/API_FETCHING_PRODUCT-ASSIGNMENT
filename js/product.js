@@ -1,30 +1,18 @@
+const details = document.getElementById("product-details");
 
 
-document.addEventListener('DOMContentLoaded', () => {
-    const productId = new URLSearchParams(window.location.search).get('id');
-    const productContainer = document.getElementById('product-container');
+const params = new URLSearchParams(window.location.search);
+const id = params.get("id");
 
-    fetch(`https://fakestoreapi.com/products/${productId}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(product => {
-            displayProduct(product);
-        })
-        .catch(error => {
-            productContainer.innerHTML = `<p>Error fetching product: ${error.message}</p>`;
-        });
-
-    function displayProduct(product) {
-        productContainer.innerHTML = `
-            <h1>${product.title}</h1>
-            <img src="${product.image}" alt="${product.title}" />
-            <p>Price: $${product.price}</p>
-            <p>Description: ${product.description}</p>
-            <p>Category: ${product.category}</p>
-        `;
-    }
-});
+fetch(`https://fakestoreapi.com/products/${id}`)
+  .then((res) => res.json())
+  .then((product) => {
+    details.innerHTML = `
+      <h2>${product.title}</h2>
+      <img src="${product.image}" alt="" style="width:200px">
+      <p><strong>Price:</strong> $${product.price}</p>
+      <p><strong>Category:</strong> ${product.category}</p>
+      <p>${product.description}</p>
+      <a href="index.html">← Back to Products</a>
+    `;
+  });
