@@ -3,32 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-Commerce Website</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <title>FakeStore E-commerce</title>
+    <link rel="stylesheet" href="style.css">
+
 </head>
 <body>
-    <header>
-        <h1>Online Store</h1>
-        <input type="text" id="search" placeholder="Search for products...">
-<input type="text" id="search-input" placeholder="Search for products...">
+    <h1>🛒 FakeStore</h1>
+    <input type="text" id="search" placeholder="Search products...">
+    <div id="product-container"></div>
+    <button id="loadMore">Load More</button>
 
-        <nav>
-            <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Products</a></li>
-                <li><a href="#">Contact Us</a></li>
-                <li><a href="#">About Us</a></li>
-            </ul>
-        </nav>
-        <div class="cart">
-            <a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
-        </div>
-    </header>
-    <main>
-        <div id="product-container" class="product-container"></div>
-        <button id="load-more" class="load-more">Load More</button>
-        <div id="no-products" class="no-products" style="display: none;">No products found</div>
-    </main>
-    <script src="js/main.js"></script>
+    <script src="script.js"></script>
+    
 </body>
 </html>
